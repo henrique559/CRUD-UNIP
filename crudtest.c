@@ -78,11 +78,13 @@ int main(void)
                 break;
 
             case 4:
-
+                system("clear");
+                printf("Em construção");
             break;
 
             case 5:
-
+                system("clear");
+                printf("Em construção");
             break;
 
             case 6:
