@@ -7,21 +7,27 @@
 #define MAX_STRING 50
 #define MAX_DATA 100
 
-//Variaveis globais
-
 int numData = 0;
 
 //Struct para dados pessoais.
 struct data
 {
+    //Dados
     char nome[MAX_STRING];
     char dataNascimento[MAX_STRING];
+    int diaNascimento;
+    int mesNascimento;
+    int anoNascimento;
     char email[MAX_STRING];
     char telefone[MAX_STRING];
     char cpf[MAX_STRING];
-    char cep[MAX_STRING];
-    char endereco[MAX_STRING];
-    
+    //Ticket
+    int tipoIngresso;
+    float totalIngresso;
+    int qntdIngresso;
+    float precoIngresso;
+    char metodoPagamento[MAX_STRING];
+    int ticketID;    
 }dados[MAX_DATA];
 
 //Registro de dados
@@ -30,11 +36,15 @@ void registroDados (void);
 //Mostrar dados
 void mostrarDados (void);
 
+//Compra e validação de ingressos
+void vendaIngressos (void);
+
 // INTERFACE
 int main(void)
 {
     //Função principal e menu do programa
-    int  option;
+
+    int option;
 
     do 
     {
@@ -49,7 +59,7 @@ int main(void)
         printf("1- Registrar dados\n2- Listar dados\n3- Comprar ingressos\n4- Sobre o museu\n5- Administração\n6- Sair\n");
         printf("DIGITE A OPÇÂO A SEGUIR: \n");
         scanf(" %d", &option); 
-
+        //Telas do menu
         switch(option)
         {
             case 1:
@@ -64,7 +74,7 @@ int main(void)
 
             case 3:
                 system("clear");
-                printf("EM CONSTRUÇÃO ");
+                vendaIngressos();
                 break;
 
             case 4:
@@ -101,7 +111,6 @@ void registroDados (void)
     //Estrutura de repetição para pegar dados.
     if(numData < MAX_DATA)
     {
-        //BUG DE INPUT!
         for(int i = 1; i <= X; i++)
         {
             printf("Cadastro [%d]: \n", i);
@@ -112,6 +121,8 @@ void registroDados (void)
             printf("\nDigite aqui sua data de nascimento: \n> ");
             fgets(dados[i].dataNascimento, MAX_STRING, stdin);
             dados[i].dataNascimento[strlen(dados[i].dataNascimento) - 1] = '\0';
+
+            sscanf(dados[i].dataNascimento, "%d %d %d", &dados[i].diaNascimento, &dados[i].mesNascimento, &dados[i].anoNascimento);
 
             printf("\nDigite aqui o seu email: \n> ");
             fgets(dados[i].email, MAX_STRING, stdin);
@@ -124,36 +135,21 @@ void registroDados (void)
             printf("\nDigite aqui o seu CPF: \n> ");
             fgets(dados[i].cpf, MAX_STRING, stdin);
             dados[i].cpf[strlen(dados[i].cpf) - 1] = '\0';
+            printf("\n---<Cadastro [%d] realizado com sucesso>---\n\n", i);
 
-            printf("\nDigite aqui seu Endereço: \n> ");
-            fgets(dados[i].endereco, MAX_STRING, stdin);
-            dados[i].endereco[strlen(dados[i].endereco) - 1] = '\0';
-
-            printf("\nDigite aqui o seu CEP: \n> ");
-            fgets(dados[i].cep, MAX_STRING, stdin);
-            dados[i].cep[strlen(dados[i].cep) - 1] = '\0';
             numData++;
-
-            printf("---<Cadastro [%d] realizado com sucesso>---\n", i);
-            sleep(2);
-            system("clear");
         }
     }
     else
     {
         printf("Limite de registros atingido.\n");
     }
-
+    printf("Aperte [ENTER] continuar\n");
+    while (getchar() != '\n');
+    system("clear");
     //Animação de encerramento.
-    printf("Voltando ao menu.\n");
-    sleep(1);
-    system("clear");
-    printf("Voltando ao menu..\n");
-    sleep(1);
-    system("clear");
     printf("Voltando ao menu...\n");
     sleep(1);
-    system("clear");
 }
 
 
@@ -165,28 +161,102 @@ void mostrarDados (void)
         for(int i = 1; i <= numData; i++)
         {
             printf("-------------------------------------------------\n");
-            printf("REGISTRO - [%d]\n", i);
+            printf("REGISTRO - [%d]\n", i+1);
             printf("Nome: %10s\n", dados[i].nome);
-            printf("Data de nascimento: %10s\n", dados[i].dataNascimento);
+            printf("Data de nascimento: %d/%d/%d\n", dados[i].diaNascimento, dados[i].mesNascimento, dados[i].anoNascimento);
             printf("Email: %10s\n", dados[i].email);
-            printf("Telefone: %10s\n", dados[i].telefone);
-            printf("CPF: %10s\n", dados[i].cpf);
-            printf("CEP: %10s\n", dados[i].cep);
-            printf("Endereço: %10s\n", dados[i].endereco);
-            printf("-------------------------------------------------\n");
+            printf("Telefone: %10.11s\n", dados[i].telefone);
+            printf("CPF: %10.11s\n", dados[i].cpf);
         }
     }
     else
     {
         system("clear");
-        printf("[Nenhum registro encontrado]\n");
+        printf("Nenhum registro encontrado.\nFaça seu cadastro na opção (1)\n");
         sleep(3);
-        system("clear");
         return;
     }
-    char opt;
-     while (getchar() != '\n');
-    printf("Deseja continuar?\n> ");
-    scanf("%c", &opt);
+    printf("-------------------------------------------------\n");
+    while (getchar() != '\n');
+    printf("Pressione [ENTER] para continuar\n");
+    scanf("%c");
+    system("clear");
+    printf("Voltando ao menu...\n");
+    sleep(1);
     system("clear");
 }
+
+void vendaIngressos (void)
+{  
+    if(numData >= 1)
+    {
+        int qntd;
+        float precoIngresso = 30.00;
+        printf("Qual a quantidade de ingressos desejados?\n");
+        scanf("%d", &qntd);
+        //Limpar Buffer
+        while (getchar() != '\n');
+
+        for(int j = 1; j <= qntd; j++)
+        {
+            printf("Escolha o tipo de ingresso\n1 - Inteiro = R$30,00\n2 - Meia entrada = R$15,00\n3 - Isento = R$00,00\n(OBS: Ingresso isento apenas para crianças menores de 6 anos e idosos maiores de 60 anos.)\n> ");
+            scanf("%d", &dados[j].tipoIngresso);
+        
+            switch(dados[j].tipoIngresso)
+            {
+                case 1:
+                    dados[j].precoIngresso = 30.00;
+                    printf("\nIngresso selecionado: Inteiro\n");
+                    printf("Valor: R$%.2f\n", dados[j].precoIngresso);
+                    dados[j].precoIngresso++;
+                    sleep(2);
+                    break;
+
+                case 2:
+                    dados[j].precoIngresso = 15.00;
+                    printf("\n Ingresso selecionado: Meia entrada\n");
+                    printf("Valor: R$%.2f\n", dados[j].precoIngresso);
+                    dados[j].precoIngresso++;
+                    sleep(2);
+                    break;
+
+                case 3:
+                    if(dados[j].anoNascimento <= 1960 || dados[j].anoNascimento >= 2017)
+                    {
+                        precoIngresso == 00.00;
+                        printf("Ingresso selecionado: Isento\n");
+                        printf("Valor: R$%.2f", (precoIngresso = 0) );
+                    }
+                    else
+                    {
+                        printf("Você nao está apto para comprar ingresso isento.\n");
+                        sleep(2);
+                    }
+                    break;
+
+            }
+        while (getchar() != '\n');
+        printf("\nQual o metodo de pagamento?\n(Aceitamos PIX, Crédito e Débito)\n> ");
+        fgets(dados[j].metodoPagamento, MAX_STRING, stdin);
+        dados[j].metodoPagamento[strlen(dados[j].metodoPagamento) - 1] = '\0';
+        
+        dados[j].ticketID = rand() % 100 + 1;
+        printf("-------------------------------------------------\n");
+        printf("INGRESSO - [%d]\n", j);
+        printf("Nome: %10s\n", dados[j].nome);
+        printf("CPF: %10.11s\n", dados[j].cpf);
+        printf("Valor do ingresso: R$%5.2f\n", precoIngresso);
+        printf("Método de pagamento: %s\n", dados[j].metodoPagamento);
+        printf("ID do Ingresso: 000%d\n", dados[j].ticketID);
+        printf("-------------------------------------------------\n");
+        }
+    }
+    else
+    {   
+        printf("Nenhum registro encontrado.\nFaça seu cadastro na opção (1).\n");
+        sleep(3);
+    }
+    printf("Pressione [ENTER] para voltar ao menu");
+    while (getchar() != '\n');
+}
+   
