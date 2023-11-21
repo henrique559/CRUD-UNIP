@@ -98,7 +98,7 @@ void vendaIngressos(void);
 // Deletar dados
 void deletarDados(void);
 
-//  Administração de sistema
+//  Login da administração de sistema
 void sysAdmin(void);
 
 //  Login dos usuarios
@@ -109,6 +109,9 @@ void museuDados(void);
 
 // Validar ID
 void validarID(void);
+
+// Menu do Administração
+void sysMenu (void);
 
 int main (void)
 {
@@ -153,7 +156,7 @@ int main (void)
 
             case 4:
                 system("clear");
-                //sysAdmin();
+                sysAdmin();
                 break;
             
             case 5:
@@ -566,91 +569,89 @@ void loginMenu()
 
 void vendaIngressos (void)
 {  
-    cadastro dados[MAX_DATA];
-    if(numData >= 1)
-    {
-        int qntd;
-        int tipoIngresso;
-        char metodoPagamento[MAX_STRING];
-        float total;
-        printf("Qual a quantidade de ingressos desejados?\n");
-        scanf("%d", &qntd);
-        //Limpar Buffer
-        while (getchar() != '\n');
+    
+}
 
-        for(int j = 1; j <= qntd; j++)
-        {
-            printf("Escolha o tipo de ingresso\n1 - Inteiro = R$30,00\n2 - Meia entrada = R$15,00\n3 - Isento = R$00,00\n(OBS: Ingresso isento apenas para crianças menores de 6 anos e idosos maiores de 60 anos.)\n> ");
-            scanf("%d", &tipoIngresso);
-            dados[j].ingressoI = 30;
-        
-            switch(tipoIngresso)
-            {
-                case 1:
-                    printf("\nIngresso selecionado: Inteiro\n");
-                    printf("Valor: R$%.2f\n\n", dados[j].ingressoI);
-                    total += dados[j].ingressoI;
-                    sleep(1);
-                    break;
+void ticketMuseu (void)
+{
 
-                case 2:
-                    dados[j].ingressoM = dados[j].ingressoI / 2;
-                    printf("\n Ingresso selecionado: Meia entrada\n");
-                    printf("Valor: R$%.2f\n\n", dados[j].ingressoM);
-                    total += dados[j].ingressoM;
-                    sleep(2);
-                    break;
-
-                case 3:
-                    if(dados[j].idade < 6 || dados[j].idade >= 60)
-                    {
-                        dados[j].ingressoF = dados[j].ingressoI * 0;
-                        printf("Ingresso selecionado: Isento\n");
-                        printf("Valor: R$%.2f\n\n",dados[j].ingressoF);
-                        total += dados[j].ingressoF;
-                    }
-                    else
-                    {
-                        printf("Você nao está apto para comprar ingresso isento.\n");
-                        sleep(2);
-                    }
-                    break;
-            }
-
-            for (int i = 1; i <= qntd; i++)
-            {
-            while (getchar() != '\n');
-            printf("\nQual o metodo de pagamento?\n(Aceitamos PIX, Crédito e Débito)\n> ");
-            fgets(metodoPagamento, MAX_STRING, stdin);
-            metodoPagamento[strlen(metodoPagamento) - 1] = '\0';
-
-            dados[i].ticketID = rand() % 100 + 1;
-            printf("-------------------------------------------------\n");
-            printf("INGRESSO - [%d]\n", i);
-            printf("Nome: %10s\n", dados[i].nome);
-            printf("CPF: %10.11s\n", dados[i].ticketID);
-            printf("Total ingresso: R$%5.2f\n", total);
-            printf("Método de pagamento: %s\n", metodoPagamento);
-            printf("ID do Ingresso: 000%d\n", dados[i].ticketID);
-            printf("-------------------------------------------------\n");
-            }
-        } 
-    }
-    else
-    {   
-        printf("Nenhum registro encontrado.\nFaça seu cadastro na opção (1).\n");
-        sleep(3);
-    }
-    printf("Pressione [ENTER] para voltar ao menu");
-    while (getchar() != '\n');
 }
 
 void pesquisaMuseu (void)
 {
-
+    
 }
 
 void sysAdmin (void)
 {
+    char sysLogin[MAX_STRING];
+    char sysPassword[MAX_DATA];
+    char log[] = "admin";
+    char pas[] = "admin";
     
+    system("clear");
+    printf("Digite aqui o login do usuario administrador: \n");
+    while(getchar() != '\n');
+    fgets(sysLogin, MAX_STRING, stdin);
+    sysLogin[strlen(sysLogin) - 1] = '\0';
+
+    printf("\nDigite aqui a senha do usuario administrador: \n");
+    fgets(sysPassword, MAX_STRING, stdin);
+    sysPassword[strlen(sysPassword) - 1] = '\0';
+
+    if(strcmp(sysLogin, log) == 0 && strcmp(sysPassword, pas) == 0)
+    {
+        sysMenu();
+    }
+    else
+    {
+        printf("\nLogin incorreto\n");
+        while(getchar() != '\n');
+        return;
+    }
+}
+
+void sysMenu (void)
+{
+    system("clear");
+    int option;
+    do
+    {
+        printf("  ******************** Administração ********************\n");
+        printf("  * 1.Validar tickets                                   *\n");
+        printf("  * 2.Listar dados                                      *\n");
+        printf("  * 3.Excluir dados                                     *\n");
+        printf("  * 4.Voltar ao menu principal                          *\n");
+        printf("  *******************************************************\n");
+        printf("Por favor, escolha as opções de 1 a 4\n");
+        scanf("%d", &option);
+
+        switch(option)
+        {
+            case 1:
+                //validarID();
+                break;
+
+            case 2:
+                mostrarDados();
+                break;
+            
+            case 3:
+                deletarDados();
+                break;
+
+            case 4:
+                return;
+                break;
+
+            default:
+                printf("Selecione a opção correta.");
+
+        }
+    }while(option);
+}
+
+void ValidarID (void)
+{
+
 }
