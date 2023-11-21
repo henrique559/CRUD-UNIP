@@ -13,17 +13,23 @@
 
             /*Variaveis Globais*/
 
-int numData = 0;
-int login = 0;
+    int numData = 0;
+    int login = 0;
+
+    char nome[MAX_STRING];
+    int idade;
+    char sexo[MAX_STRING]; 
+    char email[MAX_STRING];
+    char senha[MAX_STRING];
+    char senha2[MAX_STRING];
+    int telefone;
+    int numCPF;
 
             /*Ponteiros Globais*/
 
-char *nomePTR;
-char *emailPTR;
-char *senhaPTR;
-int *cpfPTR;
-int *idadePTR;
-
+    char *nomePTR;
+    char *emailPTR;
+    char *senhaPTR;
             /*Structs Globais*/
 
 typedef struct DATA
@@ -39,16 +45,28 @@ typedef struct DATA
     int numCPF;
 
     //INGRESSOS
-    int ingressoInteiro;
-    int ingressoMeia;
+    int ingressoI;
+    int ingressoM;
+    int ingressoF;
     int ticketID;
 
     //SysADM;
     char sysLogin[MAX_STRING];
     char sysPassword[MAX_STRING];
-}DADOS;
+}
+cadastro;
+
+typedef struct 
+{
+    char resposta[256];
+    int avaliacao;
+} 
+resposta;
 
             /*FUNÇÕES*/
+
+//Menu Login
+void loginMenu (void);
 
 //Escrever arquivo .csv
 void criarArquivo(void);
@@ -108,12 +126,10 @@ int main (void)
     
         printf("  ********************** Bem-Vindo! *********************\n");
         printf("  * 1.Fazer login                                       *\n");
-        printf("  * 2.Registrar dados                                   *\n");
-        printf("  * 3.Editar dados                                      *\n");
-        printf("  * 4.Comprar ingressos                                 *\n");
-        printf("  * 5.Sobre o museu                                     *\n");
-        printf("  * 6.Administração                                     *\n");
-        printf("  * 7.Sair                                              *\n");
+        printf("  * 2.Registrar cadastro                                *\n");
+        printf("  * 3.Sobre o museu                                     *\n");
+        printf("  * 4.Administração                                     *\n");
+        printf("  * 5.Sair                                              *\n");
         printf("  *******************************************************\n");
         printf("\nPor favor, escolha a opção de 1 a 7: \n");
         scanf(" %d", &option); 
@@ -132,23 +148,15 @@ int main (void)
 
             case 3:
                 system("clear");
-                gerenciarDados();
+                mostrarDados();
                 break;
 
             case 4:
                 system("clear");
-                //vendaIngressos();
+                //sysAdmin();
                 break;
             
             case 5:
-                system("clear");
-                break;
-
-            case 6:
-                system("clear");
-                break;
-
-            case 7:
                 system("clear");
                 printf("Saindo do programa...");
                 return 0;
@@ -165,13 +173,10 @@ int main (void)
 void registrarDados(void)
 {
     int qntd;
-    DADOS cadastro[MAX_DATA];
-    static int i;
+    int i;
 
     if(numData < MAX_DATA)
     {
-        for(i = 0; i < MAX_DATA; i++)
-        {
             system("clear");
             printf("\t  *********************\n");
             printf("\t  * REGISTRO DE DADOS *\n");
@@ -180,59 +185,47 @@ void registrarDados(void)
             printf("\nPor favor, preencha as informações: \n");
 
             printf("\nDigite seu nome completo: \n");
-            fgets(cadastro[i].nome, MAX_STRING, stdin);
-            cadastro[i].nome[strlen(cadastro[i].nome) - 1] = '\0';
+            fgets(nome, MAX_STRING, stdin);
+            nome[strlen(nome) - 1] = '\0';
 
             printf("\nDigite sua idade: \n");
-            scanf("%d", &cadastro[i].idade);
+            scanf("%d", &idade);
             while (getchar() != '\n');
 
             printf("\nDigite aqui o seu gênero: \n");
-            fgets(cadastro[i].sexo, MAX_STRING, stdin);
-            cadastro[i].sexo[strlen(cadastro[i].sexo) - 1] = '\0';
+            fgets(sexo, MAX_STRING, stdin);
+            sexo[strlen(sexo) - 1] = '\0';
 
             printf("\nDigite seu CPF: \n");
-            scanf("%d", &cadastro[i].numCPF);
+            scanf("%d", &numCPF);
             while (getchar() != '\n');
 
             printf("\nDigite aqui o seu telefone: \n");
-            scanf("%d", &cadastro[i].telefone);
+            scanf("%d", &telefone);
             while (getchar() != '\n');
 
             printf("\nDigite seu email: \n");
-            fgets(cadastro[i].email, MAX_STRING, stdin);
-            cadastro[i].email[strlen(cadastro[i].email) - 1] = '\0';
+            fgets(email, MAX_STRING, stdin);
+            email[strlen(email) - 1] = '\0';
 
             printf("\nDigite sua senha: \n");
-            fgets(cadastro[i].senha, MAX_STRING, stdin);
-            cadastro[i].senha[strlen(cadastro[i].senha) - 1] = '\0';
+            fgets(senha, MAX_STRING, stdin);
+            senha[strlen(senha) - 1] = '\0';
 
             printf("\nPor favor, digite novamente sua senha: \n");
-            fgets(cadastro[i].senha2, MAX_STRING, stdin);
-            cadastro[i].senha2[strlen(cadastro[i].senha2) - 1] = '\0';
+            fgets(senha2, MAX_STRING, stdin);
+            senha2[strlen(senha2) - 1] = '\0';
 
-            int PasswordCheck =(strcmp(cadastro[i].senha, cadastro[i].senha2));
+            int PasswordCheck =(strcmp(senha, senha2));
             if(PasswordCheck == 0)
             {
-                int opt;
-                system("clear");
-                printf("Cadastro realizado com sucesso!\n");
+                nomePTR = nome;
+                emailPTR = email;
+                senhaPTR = senha;
                 numData++;
-                sleep(1);
-
-                printf("Deseja salvar os dados?\n1- Sim\n2- Nao");
-                scanf("%d", &opt);
-                if(opt == 1)
-                {
-                    criarArquivo();
-                    printf("Aperte [ENTER] continuar\n");
-                    while (getchar() != '\n');
-                }
-                else
-                {
-                    printf("Voltando ao menu...");
-                    return;
-                }
+                
+                criarArquivo();
+                system("clear");
             }
             else
             {
@@ -240,7 +233,7 @@ void registrarDados(void)
                 printf("Senha incorreta, tente novamente.\n");
                 registrarDados();
             }
-        }
+    
     }
     else
     {
@@ -250,84 +243,101 @@ void registrarDados(void)
 
 void mostrarDados (void)
 {
-    system("clear");
+    cadastro dados[MAX_DATA];
+    FILE *data;
+    int read = 0;
 
-    DADOS cadastro[MAX_DATA];
-    if(numData >= 1)
-    {
-        for(int i = 0; i <= numData; i++)
+        data = fopen("dados.csv", "r");
+        if(data == NULL)
         {
-            printf("-------------------------------------------------\n");
-            printf("REGISTRO - [%d]\n", (i+1));
-            printf("Nome: %10s\n", cadastro[i].nome);
-            printf("Idade: %10d\n", cadastro[i].idade);
-            printf("Email: %10s\n", cadastro[i].email);
-            printf("Telefone: %10d\n", cadastro[i].telefone);
-            printf("CPF: %10d\n", cadastro[i].numCPF);
-        }
-    }
-    else
-    {
-        system("clear");
-        printf("Nenhum registro encontrado.\nFaça seu cadastro na opção (1)\n");
-        sleep(2);
+        printf("Erro ao abrir arquivo\n");
+        getchar();
         return;
-    }
-    printf("-------------------------------------------------\n");
-    while (getchar() != '\n');
-    printf("Pressione [ENTER] para continuar\n");
-    scanf("%c");
-    system("clear");
+        }
+
+        do
+        {
+            fscanf(data,
+            "%100[^,],%d,%d,%d,%100[^,],%100[^,],%100[^,]",
+            dados[numData].nome,
+            &dados[numData].idade,
+            &dados[numData].numCPF,
+            &dados[numData].telefone,
+            dados[numData].sexo,
+            dados[numData].email,
+            dados[numData].senha);
+            while (getchar() != '\n');
+
+            
+            printf("Nome: %s\nIdade: %d\nCPF: %d\nTelefone: %d\nGenero: %s\nEmail: %s\n", dados[numData].nome, dados[numData].idade, dados[numData].numCPF, dados[numData].telefone, dados[numData].sexo,
+            dados[numData].email);
+            while(getchar() != '\n');    
+
+            if (!feof(data))
+            {
+                printf("erro.\n");
+                return;
+            }
+
+            if (ferror(data))
+            {
+                printf("Erro ao ler arquivo.\n");
+                return;
+            }   
+        
+        }while (!feof(data));
+       
+    fclose(data);
 }
 
 void editarDados (void)
 {
-    DADOS cadastro[MAX_DATA];
-    int editar;
-    
-    printf("Qual registro você gostaria de mudar?");
-    scanf("%d", &editar);
-    while (getchar() != '\n');
-    for(int i = editar; i == editar; i++)
-    {
+        system("clear");
+        printf("\t  *********************\n");
+        printf("\t  * REGISTRO DE DADOS *\n");
+        printf("\t  *********************\n");
+        while (getchar() != '\n');
+        printf("\nPor favor, preencha as informações: \n");
+
         printf("\nDigite seu nome completo: \n");
-        fgets(cadastro[i].nome, MAX_STRING, stdin);
-        cadastro[i].nome[strlen(cadastro[i].nome) - 1] = '\0';
+        fgets(nome, MAX_STRING, stdin);
+        nome[strlen(nome) - 1] = '\0';
 
         printf("\nDigite sua idade: \n");
-        scanf("%d", &cadastro[i].idade);
+        scanf("%d", &idade);
         while (getchar() != '\n');
 
         printf("\nDigite aqui o seu gênero: \n");
-        fgets(cadastro[i].sexo, MAX_STRING, stdin);
-        cadastro[i].sexo[strlen(cadastro[i].sexo) - 1] = '\0';
+        fgets(sexo, MAX_STRING, stdin);
+        sexo[strlen(sexo) - 1] = '\0';
 
         printf("\nDigite seu CPF: \n");
-        scanf("%d", &cadastro[i].numCPF);
+        scanf("%d", &numCPF);
         while (getchar() != '\n');
 
         printf("\nDigite aqui o seu telefone: \n");
-        scanf("%d", &cadastro[i].telefone);
+        scanf("%d", &telefone);
         while (getchar() != '\n');
 
         printf("\nDigite seu email: \n");
-        fgets(cadastro[i].email, MAX_STRING, stdin);
-        cadastro[i].email[strlen(cadastro[i].email) - 1] = '\0';
+        fgets(email, MAX_STRING, stdin);
+        email[strlen(email) - 1] = '\0';
 
         printf("\nDigite sua senha: \n");
-        (cadastro[i].senha, MAX_STRING, stdin);
-        cadastro[i].senha[strlen(cadastro[i].senha) - 1] = '\0';
+        fgets(senha, MAX_STRING, stdin);
+        senha[strlen(senha) - 1] = '\0';
 
         printf("\nPor favor, digite novamente sua senha: \n");
-        fgets(cadastro[i].senha2, MAX_STRING, stdin);
-        cadastro[i].senha2[strlen(cadastro[i].senha2) - 1] = '\0';
+        fgets(senha2, MAX_STRING, stdin);
+        senha2[strlen(senha2) - 1] = '\0';
 
-        int PasswordCheck =(strcmp(cadastro[i].senha, cadastro[i].senha2));
+        int PasswordCheck =(strcmp(senha, senha2));
         if(PasswordCheck == 0)
         {
             int opt;
             system("clear");
             printf("Cadastro atualizado com sucesso!\n");
+            criarArquivo();
         }
         else
         {
@@ -335,12 +345,12 @@ void editarDados (void)
             printf("Senha incorreta, tente novamente.\n");
             editarDados();
         }
-    }
+    
 }
 
 void deletarDados (void)
 {
-    DADOS cadastro[MAX_DATA];
+    cadastro dados[MAX_DATA];
     char emailLogin[MAX_DATA];
     char senhaLogin[MAX_DATA];
     int opt;
@@ -356,7 +366,7 @@ void deletarDados (void)
 
         for(int i = ID - 1; i < MAX_DATA - 1; i++)
         {
-            cadastro[i] = cadastro[i + 1];
+            dados[i] = dados[i + 1];
         }
         numData--;        
     }
@@ -369,7 +379,6 @@ void deletarDados (void)
 
 void criarArquivo (void)
 {
-    DADOS cadastro;
     FILE *dados;
     dados = fopen ("dados.csv", "a");
 
@@ -379,20 +388,24 @@ void criarArquivo (void)
         sleep(1);
         return;
     }
-    fprintf(dados, "Nome: %s\nIdade: %d\nGenero: %s\nCPF: %d\n Telefone: %d\nEmail: %s\nSenha: %s\n", cadastro.nome, cadastro.idade, cadastro.sexo, cadastro.numCPF,
-    cadastro.telefone, cadastro.email, cadastro.senha);
+        
+    fprintf(dados, "%s,%d,%d,%d,%s,%s,%s\n", nome, idade, numCPF, telefone,
+    sexo, email, senha);
 
-    printf("Arquivo criado com sucesso!");
+    system("clear");
+    printf("Cadastro realizado com sucesso!\n");
+    sleep(1);
 
     fclose(dados);
 }
 
 void loginDados(void)
 {
-    DADOS cadastro[MAX_DATA];
+    cadastro dados[MAX_DATA];
+    FILE *data;
     char emailLogin[MAX_DATA];
     char senhaLogin[MAX_DATA];
-
+    int read = 0;
     if (numData < 1)
     {
         system("clear");
@@ -404,28 +417,64 @@ void loginDados(void)
     {
         system("clear");
         printf("Digite seu email: \n");
+        while (getchar() != '\n');
         fgets(emailLogin, MAX_STRING, stdin);
         emailLogin[strlen(emailLogin) - 1] = '\0';
 
-        printf("Digite sua senha: \n");
+        printf("\nDigite sua senha: \n");
         fgets(senhaLogin, MAX_STRING, stdin);
         senhaLogin[strlen(senhaLogin) - 1] = '\0';
 
-        for(int i = 0; i < MAX_DATA; i++)
+        data = fopen("dados.csv", "r");
+        if(data == NULL)
         {
-            if(strcmp(cadastro[i].email, emailLogin) == 0 && strcmp(cadastro[i].senha, senhaLogin)==0)
+        printf("Erro ao abrir arquivo\n");
+        getchar();
+        return; 
+        }
+
+        do
+        {
+            fscanf(data,
+            "%100[^\n],%d,%d,%d,%100[^\n],%100[^\n],%100[^\n]",
+            dados[numData].nome,
+            &dados[numData].idade,
+            &dados[numData].numCPF,
+            &dados[numData].telefone,
+            dados[numData].sexo,
+            dados[numData].email,
+            dados[numData].senha);
+            while (getchar() != '\n');
+
+            if(strcmp(emailLogin, email) == 0 && strcmp(senhaLogin, senha)==0)
             {
                 printf("Login realizado com sucesso!\n");
-                while (getchar() != '\n');
-                login++;
-                return;
+                sleep(1);
+                loginMenu();
             }
             else
             {
+                system("clear");
                 printf("Dados incorretos, tente novamente.\n");
+                sleep(1);
                 loginDados();
+                return;
             }
-        }
+
+            if (!feof(data))
+            {
+                printf("erro.\n");
+                return;
+            }
+
+            if (ferror(data))
+            {
+                printf("Erro ao ler arquivo.\n");
+                return;
+            }   
+        } 
+        while (!feof(data));
+        fclose(data);
     }   
 }
 
@@ -440,11 +489,10 @@ void gerenciarDados (void)
         printf("  * 2.Editar dados                                      *\n");
         printf("  * 3.Deletar dados                                     *\n");
         printf("  * 4.Exportar arquivo .CSV                             *\n");
-        printf("  * 5.Importar arquivo .CSV                             *\n");
-        printf("  * 6.Voltar ao menu principal                          *\n");
+        printf("  * 5.Voltar                                            *\n");
         printf("  *******************************************************\n");
 
-        printf("Escolha uma opção: \n");
+        printf("Por favor, escolha uma opção de 1 a 5: \n");
         scanf("%d", &options);
 
         switch (options)
@@ -464,12 +512,9 @@ void gerenciarDados (void)
         case 4:
             criarArquivo();
             break;
-
-        case 5:
-            //importarDados();
-            break;
         
-        case 6:
+        case 5:
+            system("clear");
             return;
             break;
         
@@ -478,4 +523,134 @@ void gerenciarDados (void)
         }
     }
     while (options);
+}
+
+void loginMenu()
+{
+    int optt;
+    do
+    {
+        system("clear");
+        printf("  ******************** Minha conta **********************\n");
+        printf("  * 1.Comprar ingressos                                 *\n");
+        printf("  * 2.Pesquisa de satisfação                            *\n");
+        printf("  * 3.Gerenciar dados                                   *\n");
+        printf("  * 4.Voltar ao menu principal                          *\n");
+        printf("  *******************************************************\n");
+        printf("\nPor favor, escolha a opção de 1 a 7: \n");
+        scanf("%d", &optt);
+        switch(optt)
+        {
+            case 1:
+                vendaIngressos();
+                break;
+
+            case 2:
+                //pesquisaMuseu();
+                break;
+
+            case 3:
+                gerenciarDados();
+                break;
+            
+            case 4:
+                return;
+                break;
+
+            default:
+                break;  
+        }
+    }
+    while(optt);
+}
+
+void vendaIngressos (void)
+{  
+    cadastro dados[MAX_DATA];
+    if(numData >= 1)
+    {
+        int qntd;
+        int tipoIngresso;
+        char metodoPagamento[MAX_STRING];
+        float total;
+        printf("Qual a quantidade de ingressos desejados?\n");
+        scanf("%d", &qntd);
+        //Limpar Buffer
+        while (getchar() != '\n');
+
+        for(int j = 1; j <= qntd; j++)
+        {
+            printf("Escolha o tipo de ingresso\n1 - Inteiro = R$30,00\n2 - Meia entrada = R$15,00\n3 - Isento = R$00,00\n(OBS: Ingresso isento apenas para crianças menores de 6 anos e idosos maiores de 60 anos.)\n> ");
+            scanf("%d", &tipoIngresso);
+            dados[j].ingressoI = 30;
+        
+            switch(tipoIngresso)
+            {
+                case 1:
+                    printf("\nIngresso selecionado: Inteiro\n");
+                    printf("Valor: R$%.2f\n\n", dados[j].ingressoI);
+                    total += dados[j].ingressoI;
+                    sleep(1);
+                    break;
+
+                case 2:
+                    dados[j].ingressoM = dados[j].ingressoI / 2;
+                    printf("\n Ingresso selecionado: Meia entrada\n");
+                    printf("Valor: R$%.2f\n\n", dados[j].ingressoM);
+                    total += dados[j].ingressoM;
+                    sleep(2);
+                    break;
+
+                case 3:
+                    if(dados[j].idade < 6 || dados[j].idade >= 60)
+                    {
+                        dados[j].ingressoF = dados[j].ingressoI * 0;
+                        printf("Ingresso selecionado: Isento\n");
+                        printf("Valor: R$%.2f\n\n",dados[j].ingressoF);
+                        total += dados[j].ingressoF;
+                    }
+                    else
+                    {
+                        printf("Você nao está apto para comprar ingresso isento.\n");
+                        sleep(2);
+                    }
+                    break;
+            }
+
+            for (int i = 1; i <= qntd; i++)
+            {
+            while (getchar() != '\n');
+            printf("\nQual o metodo de pagamento?\n(Aceitamos PIX, Crédito e Débito)\n> ");
+            fgets(metodoPagamento, MAX_STRING, stdin);
+            metodoPagamento[strlen(metodoPagamento) - 1] = '\0';
+
+            dados[i].ticketID = rand() % 100 + 1;
+            printf("-------------------------------------------------\n");
+            printf("INGRESSO - [%d]\n", i);
+            printf("Nome: %10s\n", dados[i].nome);
+            printf("CPF: %10.11s\n", dados[i].ticketID);
+            printf("Total ingresso: R$%5.2f\n", total);
+            printf("Método de pagamento: %s\n", metodoPagamento);
+            printf("ID do Ingresso: 000%d\n", dados[i].ticketID);
+            printf("-------------------------------------------------\n");
+            }
+        } 
+    }
+    else
+    {   
+        printf("Nenhum registro encontrado.\nFaça seu cadastro na opção (1).\n");
+        sleep(3);
+    }
+    printf("Pressione [ENTER] para voltar ao menu");
+    while (getchar() != '\n');
+}
+
+void pesquisaMuseu (void)
+{
+
+}
+
+void sysAdmin (void)
+{
+    
 }
