@@ -116,10 +116,13 @@ void museuDados(void);
 void validarID(void);
 
 // Ticket Museu
-void ticketMuseu (void);
+void ticketMuseu (int x);
 
 // Menu do Administração
 void sysMenu (void);
+
+// Pesquisa do Museu
+void pesquisaMuseu (void);
 
 int main (void)
 {
@@ -128,20 +131,26 @@ int main (void)
     do 
     {
         system("clear");
-        printf("\n @@@@@@@  @@@  @@@  @@@  @@@@@@@@   @@@@@@   @@@@@@@   @@@@@@@  \n@@@@@@@@  @@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@  \n");
-        printf("!@@       @@!  @@!@!@@@  @@!       @@!  @@@  @@!  @@@    @@!    \n!@!       !@!  !@!!@!@!  !@!       !@!  @!@  !@!  @!@    !@!    \n");
-        printf("!@!       !!@  @!@ !!@!  @!!!:!    @!@!@!@!  @!@!!@!     @!!    \n!!!       !!!  !@!  !!!  !!!!!:    !!!@!!!!  !!@!@!      !!!    \n");
-        printf(":!!       !!:  !!:  !!!  !!:       !!:  !!!  !!: :!!     !!:    \n:!:       :!:  :!:  !:!  :!:       :!:  !:!  :!:  !:!    :!:    \n");
-        printf(" ::: :::   ::   ::   ::   :: ::::  ::   :::  ::   :::     ::    \n :: :: :  :    ::    :   : :: ::    :   : :   :   : :     :\n\n\n");
+        printf(" \n @@@@@@@  @@@  @@@  @@@  @@@@@@@@   @@@@@@   @@@@@@@   @@@@@@@   @@@@@@@@ \n");
+        printf("@@@@@@@@  @@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@   @@@@@@@@\n");
+        printf("!@@       @@!  @@!@!@@@  @@!       @@!  @@@  @@!  @@@    @@!     @@!\n");
+        printf("!@!       !@!  !@!!@!@!  !@!       !@!  @!@  !@!  @!@    !@!     !@!\n");
+        printf("!@!       !!@  @!@ !!@!  @!!!:!    @!@!@!@!  @!@!!@!     @!!     @!!!:!\n");
+        printf("!!!       !!!  !@!  !!!  !!!!!:    !!!@!!!!  !!@!@!      !!!     !!!!!: \n");
+        printf(":!!       !!:  !!:  !!!  !!:       !!:  !!!  !!: :!!     !!:     !!:\n");
+        printf(":!:       :!:  :!:  !:!  :!:       :!:  !:!  :!:  !:!    :!:     :!:  \n");
+        printf(" ::: :::   ::   ::   ::   :: ::::  ::   :::  ::   :::     ::      :: ::::\n");
+        printf(" :: :: :  :    ::    :   : :: ::    :   : :   :   : :     :      : :: :: \n\n\n");
+
 
     
-        printf("  ********************** Bem-Vindo! *********************\n");
-        printf("  * 1.Fazer login                                       *\n");
-        printf("  * 2.Registrar cadastro                                *\n");
-        printf("  * 3.Sobre o museu                                     *\n");
-        printf("  * 4.Administração                                     *\n");
-        printf("  * 5.Sair                                              *\n");
-        printf("  *******************************************************\n");
+        printf("        ********************** Bem-Vindo! *********************\n");
+        printf("        * 1.Fazer login                                       *\n");
+        printf("        * 2.Registrar cadastro                                *\n");
+        printf("        * 3.Sobre o museu                                     *\n");
+        printf("        * 4.Administração                                     *\n");
+        printf("        * 5.Sair                                              *\n");
+        printf("        *******************************************************\n");
         printf("\nPor favor, escolha a opção de 1 a 5: \n");
         scanf(" %d", &option); 
         //Telas do menu
@@ -547,7 +556,7 @@ void gerenciarDados (void)
     while (options);
 }
 
-void loginMenu()
+void loginMenu(void)
 {
     int optt;
     do
@@ -570,7 +579,7 @@ void loginMenu()
                 break;
 
             case 2:
-                ticketMuseu();
+                ticketMuseu(qntd);
                 break;
 
             case 3:
@@ -578,7 +587,7 @@ void loginMenu()
                 break;
             
             case 4:
-                //Pesquisa();
+                pesquisaMuseu();
                 break;
 
             case 5:
@@ -638,13 +647,14 @@ void vendaIngressos (void)
     {
         case 1:
             printf("\nSelecione a quantidade de ingressos desejados: \n");
-            scanf(" %d", &ingressoI);
+            scanf(" %d", &qntd);
             while(getchar() != '\n');
 
             printf("\nSelecione o horário de visita: [MANHA/TARDE]\n");
             fgets(horario, MAX_STRING, stdin);
             horario[strlen(horario) - 1] = '\0';
 
+            ingressoI = qntd;
             ingressoI *= 30;
             total = ingressoI;
             printf("\nValor total: R$%.2f\n", (float) total);
@@ -682,7 +692,7 @@ void vendaIngressos (void)
                     printf("Compra realizada com sucesso!\n");
                     printf("Pressione [ENTER] para continuar");
                     while(getchar() != '\n');
-                    ticketMuseu();
+                    ticketMuseu(qntd);
                 }
             }
 
@@ -706,20 +716,21 @@ void vendaIngressos (void)
 
                 printf("\nCompra realizada com sucesso\n");
                 while(getchar() != '\n');
-                ticketMuseu();
+                ticketMuseu(qntd);
             }
 
             break;
         
         case 2:
             printf("Selecione a quantidade de ingressos desejados: \n");
-            scanf(" %d", &ingressoM);
+            scanf(" %d", &qntd);
             while(getchar() != '\n');
 
             printf("\nSelecione o horário de visita: [MANHA/TARDE]\n");
             fgets(horario, MAX_STRING, stdin);
             horario[strlen(horario) - 1] = '\0';
 
+            ingressoM = qntd;
             ingressoM *= 15;
             total = ingressoM;
             printf("\nValor total: R$%.2f\n", (float) total);
@@ -757,7 +768,7 @@ void vendaIngressos (void)
                 {
                     printf("Compra realizada com sucesso!\n");
                     while(getchar() != '\n');
-                    ticketMuseu();
+                    ticketMuseu(qntd);
                 }
             }
 
@@ -780,7 +791,7 @@ void vendaIngressos (void)
                 while(getchar() != '\n');
 
                 printf("Compra realizada com sucesso\n");
-                ticketMuseu();
+                ticketMuseu(qntd);
             }
 
             break;
@@ -793,15 +804,17 @@ void vendaIngressos (void)
             else
             {
             printf("Selecione a quantidade de ingressos desejados: \n");
-            scanf(" %d", &ingressoI);
+            scanf(" %d", &qntd);
             while(getchar() != '\n');
 
             printf("Selecione o horário de visita: [MANHA/TARDE]\n");
             fgets(horario, MAX_STRING, stdin);
             horario[strlen(horario) - 1] = '\0';
 
-            ingressoI *= 0;
-            total = ingressoI;
+
+            ingressoF = qntd;
+            ingressoF *= 0;
+            total = ingressoF;
             printf("Valor total: R$%.2f\n", (float) total);
             printf("Qual o metodo de pagamento?\n");
             printf("[1] - Crédito/Débito\n[2] - PIX\n");
@@ -837,6 +850,7 @@ void vendaIngressos (void)
                 {
                     printf("Compra realizada com sucesso!\n");
                     while(getchar() != '\n');
+                    ticketMuseu(qntd);
                 }
             }
             else if (opt == 2)
@@ -858,13 +872,19 @@ void vendaIngressos (void)
                 while(getchar() != '\n');
 
                 printf("Compra realizada com sucesso\n");
-                ticketMuseu();
+                ticketMuseu(qntd);
             }
 
             }
             break;
 
-        case 4:
+            case 4:
+                system("clear");
+                printf("Em progresso...\nPressione [Enter] para voltar ao menu.\n");
+                while(getchar() != '\n');
+                break;
+
+        /*case 4:
             printf("Selecione a quantidade de ingressos inteiros desejados: \n");
             scanf(" %d", &ingressoI);
             while(getchar() != '\n');
@@ -915,7 +935,7 @@ void vendaIngressos (void)
                 {
                     printf("Compra realizada com sucesso!\n");
                     while(getchar() != '\n');
-                    ticketMuseu();
+                    ticketMuseu(qntd);
                 }
             }
             else if (opt == 2)
@@ -937,22 +957,21 @@ void vendaIngressos (void)
                 while(getchar() != '\n');
 
                 printf("Compra realizada com sucesso\n");
-                ticketMuseu();
+                ticketMuseu(qntd);
             }
-            break;
+            break;*/
     }
 
 }
 
-void ticketMuseu (void)
+void ticketMuseu (int x)
 {
     char opttt;
 
     TicketID = rand() % 100 + 1;
-    system("clear");
-
-    if (total == 0)
+    if (qntd == 0)
     {
+        system("clear");
         printf("Nenhum ticket encontrado\n");
         printf("Pressione [ENTER] para continuar\n");
         while(getchar() != '\n');
@@ -960,17 +979,19 @@ void ticketMuseu (void)
     }
     else
     {
-        for(int i = 0; i < qntd; i++)
+        total = total / x;
+        system("clear");
+        for(int i = 0; i < x; i++)
         {
             printf("  +-------------------------------+\n");
-            printf("                                 \n");
+            printf("                                \n");
             printf("  [TICKET - %d]                   \n", i+1);
-            printf("  Nome:  %7s                      \n", nome);
-            printf("  Idade:  %7d                     \n", idade);
-            printf("  CPF:  %7d                        \n", numCPF);
-            printf("  Horario:  %7s               \n", horario);
-            printf("  Preço do ingresso:  %7.2f   \n", total);
-            printf("  ID do ingresso:  000%7d        \n", TicketID);
+            printf("  Nome:  %s                      \n", nome);
+            printf("  Idade:  %d                     \n", idade);
+            printf("  CPF:  %d                        \n", numCPF);
+            printf("  Horario:  %s               \n", horario);
+            printf("  Preço do ingresso:  R$%.2f   \n", (float) total);
+            printf("  ID do ingresso:  000%d        \n", TicketID + i);
             printf("                                \n");
         }
     }
@@ -991,7 +1012,8 @@ void ticketMuseu (void)
         }
         fprintf(ticketz, "Nome:%7s\nIdade:%7d\nCPF:%7d\nHorario:%7s\nPreço:%7.2f\nID:%0007d\n\n",nome,idade,numCPF,horario,total,TicketID);
         fclose(ticketz);
-
+        while(getchar() != '\n');
+        system("clear");
         printf("Arquivo criado com sucesso!\n");
         printf("Pressione [Enter para sair]");
         while(getchar() != '\n');
@@ -1006,19 +1028,25 @@ void pesquisaMuseu (void)
 {
     cadastro pesquisa[MAX_DATA];
     char opt;
-    int num_respostas = 0;
+    int num_respostas = 1;
 
-    for (int i = 0; i <= num_respostas; i++)
+    for (int i = 0; i < num_respostas; i++)
     {
-        printf("Avaliacao do museu\n");
-        printf("Feedback:\n");
+        system("clear");
+        printf("  +------------------------------------+\n");
+        printf("  |             [AVALIAÇÃO]            |\n");
+        printf("  +------------------------------------+\n\n");   
 
-        scanf("%[^\n]%s", pesquisa[i].resposta);
-        printf("%s", pesquisa[i].resposta);
-        printf("Avalie de 0 a 10\n");
-        printf("0 - Totalmente insatisfeito\n10 - Totalmente satisfeito\n");
+        printf("Olá! Gostariamos de ouvir sua opinião em relação ao nosso museu\npedimos que deixe um feedback com uma crítica construtiva ou uma sugestão de melhoria\n");
+        printf("para que o nosso museu continue melhorando e sendo o melhor para vocês\nMuito obrigado! :)\n\n");
+
+        printf("Feedback:\n");
+        fgets(pesquisa[i].resposta, 256, stdin);
+        printf("\nAvalie de 0 a 10 a sua visita ao Museu\n");
+        printf("[0 - Totalmente insatisfeito]\n[10 - Totalmente satisfeito]\n");
         printf(">");
         scanf("%d", &pesquisa[i].avaliacao);
+        while(getchar() != '\n');
 
         if(pesquisa[i].avaliacao < 0 || pesquisa[i].avaliacao > 10)
         {
@@ -1030,10 +1058,34 @@ void pesquisaMuseu (void)
 
         if(opt == 'n' || opt == 'N' || i > MAX_DATA);
         {
-            return;
+            break;
         }
         num_respostas++;
     }
+    system("clear");
+    printf("[RESPOSTAS]\n\n");
+    
+    for(int j = 0; j < num_respostas; j++)
+    {
+        printf("Avaliação (%d)\n", (j + 1));
+        printf("Feedback:\n%s\n",pesquisa[j].resposta);
+        printf("Avaliação de 0 a 10:\n");
+        if(pesquisa[j].avaliacao < 5)
+        {
+            printf("%d - [%s]\n", pesquisa[j].avaliacao, "Insatisfeito");
+        }
+        else
+        {
+            printf("%d - [%s]\n", pesquisa[j].avaliacao, "Satisfeito");
+        }
+
+    }
+    printf("Pressione [ENTER] para continuar\n");
+    while(getchar() != '\n');
+    while(getchar() != '\n');
+    
+
+
     //Imprimir resultado
 
 }
@@ -1165,7 +1217,7 @@ void museuDados (void)
     do
     {
         system("clear");
-        printf("  ****************************************** CineArt ********************************************\n");
+        printf("  ****************************************** CineArte ********************************************\n");
         printf("  *                                                                                             *\n");
         printf("  *                                     Seja bem-vindo(a)                                       *\n");
         printf("  *                                                                                             *\n"); //Descricao
@@ -1396,5 +1448,3 @@ void museuDados (void)
     }
     while(optt);
 }
-
-
