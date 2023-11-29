@@ -1249,7 +1249,6 @@ void museuDados (void)
         switch(optt)
         {
             case 1:
-                int sair1;
                 limparTela();
                 printf("                     +---------------------------------------------------+\n");
                 printf("                     |             [O Exterminador do futuro]            |\n");
@@ -1349,8 +1348,7 @@ void museuDados (void)
 
                 break;
 
-            case 3:
-                char sair3;
+            case 3 :
                 limparTela();
                 printf("                  +---------------------------------------------------+\n");
                 printf("                  |                [O Senhor dos Anéis]               |\n");
@@ -1454,6 +1452,6 @@ void museuDados (void)
 
 void limparTela (void)
 {
-    printf("\e[1;1H\e[2J");
+    system("cls");
     return;
 }
